@@ -207,7 +207,9 @@ userRouter.post("/buyOne", authenticatedUser, async (req, res) => {
 });
 
 userRouter.get("/preview", async (_, res) => {
-  const products = await Product.find({}).select("name description price -_id");
+  const products = await Product.find({}).select(
+    "name description price stock -_id"
+  );
   res.status(200).json(products);
 });
 
