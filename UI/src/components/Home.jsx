@@ -4,26 +4,10 @@ import { toast } from "react-toastify";
 
 function Home() {
   const [products, setProducts] = useState([]);
-  //   const products = [
-  //     {
-  //       id: 1,
-  //       name: "Product 1",
-  //       price: "$29.99",
-  //       description: "This is a great product.",
-  //       inStock: true,
-  //     },
-  //     {
-  //       id: 2,
-  //       name: "Product 2",
-  //       price: "$19.99",
-  //       description: "This product is out of stock.",
-  //       inStock: false,
-  //     },
-  //   ];
   const path = "http://localhost:3000/api/v1/user/preview";
   const fetchProducts = async () => {
     try {
-      const res = await axios.get(`${path}`);
+      const res = await axios.get(path);
       if (res.status === 200) {
         setProducts(res.data);
       }
@@ -41,15 +25,12 @@ function Home() {
   }, []);
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Header */}
       <header className="bg-gray-800 text-white p-4 flex flex-col">
         <div className="flex justify-between items-center mb-4">
-          {/* Logo */}
           <div className="flex items-center">
             <img src="./public/shopping.png" alt="Logo" className="w-8 h-8" />
           </div>
 
-          {/* Search Bar */}
           <div className="flex flex-grow mx-4">
             <input
               type="text"
@@ -61,7 +42,6 @@ function Home() {
             </button>
           </div>
 
-          {/* Cart and Profile Links */}
           <div className="flex space-x-4">
             <a href="/cart" className="hover:underline">
               Cart
@@ -72,7 +52,6 @@ function Home() {
           </div>
         </div>
 
-        {/* Navigable Links */}
         <nav className="flex space-x-4 text-gray-300 justify-between">
           <a href="/all" className="hover:underline">
             All
@@ -106,7 +85,7 @@ function Home() {
           >
             <h2 className="text-lg font-bold">{product.name}</h2>
             <p className="text-gray-700 flex-grow">{product.description}</p>
-            <p className="text-xl font-semibold">{product.price}</p>
+            <p className="text-xl font-semibold">$ {product.price}</p>
             <p
               className={`text-sm ${
                 product.stock > 0 ? "text-green-600" : "text-red-600"
@@ -128,7 +107,6 @@ function Home() {
         ))}
       </main>
 
-      {/* Footer */}
       <footer className="bg-gray-800 text-white text-center p-4">
         Created with ❤️ by Chakshu
       </footer>

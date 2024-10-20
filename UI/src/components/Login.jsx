@@ -8,21 +8,25 @@ function Login() {
     email: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isLoading) return;
+    setIsLoading(true);
     const path = "http://localhost:3000/api/v1/user/login";
     try {
-      const res = await axios.post(`${path}`, formData);
+      const res = await axios.post(path, formData);
       if (res.status) {
         toast.success(res.data.message || "Login successful");
         localStorage.setItem("token", res.data.token);
@@ -31,8 +35,8 @@ function Login() {
             email: "",
             password: "",
           });
+          navigate("/");
         }, 2000);
-        setTimeout(() => navigate("/"), 3000);
       }
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -43,6 +47,8 @@ function Login() {
       } else {
         toast.error("Error logging in");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 

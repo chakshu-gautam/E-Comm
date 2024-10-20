@@ -10,21 +10,25 @@ function Register() {
     email: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isLoading) return;
+    setIsLoading(true);
     const path = "http://localhost:3000/api/v1/user/register";
     try {
-      const res = await axios.post(`${path}`, formData);
+      const res = await axios.post(path, formData);
       if (res.status === 201) {
         toast.success(res.data.message || "User registered successfully");
         setTimeout(() => {
@@ -33,8 +37,8 @@ function Register() {
             email: "",
             password: "",
           });
+          navigate("/Login");
         }, 2000);
-        setTimeout(() => navigate("/Login"), 3000);
       }
     } catch (error) {
       if (error.response && error.response.status === 400) {
@@ -42,6 +46,8 @@ function Register() {
       } else {
         toast.error("Error registering user");
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
